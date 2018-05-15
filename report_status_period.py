@@ -14,9 +14,9 @@ time_start = sys.argv[1]
 #nome file log di fine
 time_stop =sys.argv[2]
 
-if not os.path.exists("LOGS_Period"):
-    os.makedirs("LOGS_Period")
-output = open("LOGS_Period/logs_"+time_start+"_"+time_stop+".txt", "w")
+if not os.path.exists("LOGS_StatusPeriod"):
+    os.makedirs("LOGS_StatusPeriod")
+output = open("LOGS_StatusPeriod/logs_"+time_start+"_"+time_stop+".txt", "w")
 
 tmp_file = open("tmp.txt", "w")
 
@@ -55,11 +55,14 @@ unique_users = sorted(list(set(users)))
 
 
 for user in unique_users:
-    cputime_total = []
-    walltime_total = []
+
     total_n_jobs = 0
     jobs = []
     jobs_and_queue = []
+    jobs_ok = []
+    jobs_error = []
+    jobs_killed = []
+    jobs_not_status= []
     unique_jobs = []
     name_and_surname = user.split(".")
     name = name_and_surname[0]
@@ -71,8 +74,10 @@ for user in unique_users:
         day=file[6]+file[7]
         lines = []
         jobs_of_file = []
-        cputime_file = []
-        walltime_file = []
+        jobs_ok_file = []
+        jobs_error_file = []
+        jobs_killed_file = []
+        jobs_notstatus_file = []
         job_file = []
         with open("logs/"+file, "r") as f:
             tmp_file.write("reading file " + file +" for user "+name+" "+surname+ "\n")
@@ -106,8 +111,6 @@ for user in unique_users:
             output.write("\n")
             flag = 0
             for job in unique_jobs_file:
-                cputime = ""
-                walltime = ""
                 with open("logs/" + file, "r") as f:
                     tmp = f.read().split("\n")
                     for t in tmp:
@@ -119,12 +122,6 @@ for user in unique_users:
                                 tk = tokens_line[1].split(";")
                                 if tk[5].split("=")[0] == "Exit_status":
                                     flag = 1
-                                    cputime_total.append(tokens_line[3])
-                                    cputime = tokens_line[3]
-                                    cputime_file.append(cputime)
-                                    walltime = tokens_line[7]
-                                    walltime_total.append(walltime)
-                                    walltime_file.append(walltime)
                                     status_line = tokens_line[1]
                                     status_tokens = status_line.split(";")
                                     status = status_tokens[5]
@@ -136,66 +133,56 @@ for user in unique_users:
                                     resp = "value not defined"
                                     if value == "0":
                                         resp = "job completed with success"
+                                        jobs_ok_file.append(job)
+                                        jobs_ok.append(job)
                                     elif value == "1":
                                         resp = "job contains an error code"
+                                        jobs_error.append(job)
+                                        jobs_error_file.append(job)
                                     elif value == "271":
                                         resp = "job has been killed manually"
+                                        jobs_killed.append(job)
+                                        jobs_killed_file.append(job)
+                                    else:
+                                        jobs_not_status.append(job)
+                                        jobs_notstatus_file.append(job)
                                     right_queue = ""
                                     for jobQ, queueQ in jobs_and_queue:
                                         if jobQ == job:
                                             right_queue = queueQ
-                                    output.write(
-                                        "JOB: " + job + ", date: " + day + "/" + month + "/" + year + ", queue: " + right_queue + ", " + str(
-                                            cputime) + ", " + str(
-                                            walltime) + ", status job " + status + ". It means: " + resp + "\n")
             total_n_jobs = total_n_jobs + unique_jobs_file.__len__()
             if flag == 0:
                 output.write("There are no job that finished in current file\n")
             else:
-                total_cputime_file = timedelta(hours=0, minutes=0, seconds=0)
-                for time in cputime_file:
-                    token = time.split("=")
-                    singles = token[1].split(":")
-                    time_delta = timedelta(hours=int(singles[0]), minutes=int(singles[1]), seconds=int(singles[2]))
-                    total_cputime_file = total_cputime_file + time_delta
-
-                total_walltime_file = timedelta(hours=0, minutes=0, seconds=0)
-                for time in walltime_file:
-                    token = time.split("=")
-                    singles = token[1].split(":")
-                    time_delta = timedelta(hours=int(singles[0]), minutes=int(singles[1]), seconds=int(singles[2]))
-                    total_walltime_file = total_walltime_file + time_delta
-
-                output.write("\nTotal cputime of file " + day + "/" + month + "/" + year + ": " + str(
-                    total_cputime_file) + ". Total walltime of file is: " + str(total_walltime_file) + "\n\n")
-
+                output.write("Number of jobs with Exit status = Ok (0) in current file : "+str(jobs_ok_file.__len__())+". Jobs are: ")
+                for job in jobs_ok_file:
+                    output.write(job+" ")
+                output.write("\nNumber of jobs with Exit status = Error (1) in current file : "+str(jobs_error_file.__len__())+". Jobs are: ")
+                for job in jobs_error_file:
+                    output.write(job+" ")
+                output.write("\nNumber of jobs with Exit status = Killed Manually (271) in current file : " + str(jobs_killed_file.__len__()) + ". Jobs are: ")
+                for job in jobs_killed_file:
+                    output.write(job + " ")
+                output.write("\nNumber of jobs with Exit status not identified in current file : " + str(jobs_notstatus_file.__len__()) + ". Jobs are: ")
+                for job in jobs_notstatus_file:
+                    output.write(job + " ")
+                output.write("\n\n")
         else:
             output.write("There are no jobs in current file\n")
 
-    output.write("\n\nList of all jobs: ")
-    for job in unique_jobs:
+    output.write("\nNumber of jobs for current period for user "+name+" "+surname+": "+str(unique_jobs.__len__()))
+    output.write("\nNumber of all jobs for current period with Exit status = Ok (0): "+str(jobs_ok.__len__())+". The jobs are: ")
+    for job in jobs_ok:
         output.write(job + " ")
-
-    print("Cputime total elements " + str(cputime_total.__len__()) + "  walltime total elements  " + str(
-            walltime_total.__len__()) + "\n")
-    final_cputime = timedelta(hours=0, minutes=0, seconds=0)
-    final_walltime = timedelta(hours=0, minutes=0, seconds=0)
-
-    for time in cputime_total:
-        token = time.split("=")
-        singles = token[1].split(":")
-        time_delta = timedelta(hours=int(singles[0]), minutes=int(singles[1]), seconds=int(singles[2]))
-        final_cputime = final_cputime + time_delta
-
-    for time in walltime_total:
-        token = time.split("=")
-        singles = token[1].split(":")
-        time_delta = timedelta(hours=int(singles[0]), minutes=int(singles[1]), seconds=int(singles[2]))
-        final_walltime = final_walltime + time_delta
-
-    output.write("\nTOTAL CPU TIME = " + str(final_cputime) + ", TOTAL WALLTIME = " + str(
-        final_walltime) + ",  TOTAL NUMBER OF JOBS = " + str(unique_jobs.__len__()) + "\n")
-
+    output.write("\nNumber of all jobs for current period with Exit status = Error (1): "+str(jobs_error.__len__())+". The jobs are: ")
+    for job in jobs_error:
+        output.write(job + " ")
+    output.write("\nNumber of all jobs for current period with Exit status = Killed Manually (271): "+str(jobs_killed.__len__())+". The jobs are: ")
+    for job in jobs_killed:
+        output.write(job + " ")
+    output.write("\nNumber of all jobs for current period with Exit status not identified: "+str(jobs_not_status.__len__())+". The jobs are: ")
+    for job in jobs_not_status:
+        output.write(job + " ")
     output.write("\n------------------------------------------------------------------------------------------------------------------------------------\n")
 
 
