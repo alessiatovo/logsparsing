@@ -1,4 +1,4 @@
-#README.md
+# README.md
 
 Elenco di script:
 
@@ -24,7 +24,7 @@ Il file sopra citato riporta:
 Le informazioni riportate nell'ultimo punto vengono mostrate per ogni utente presente nell'intervallo di tempo considerato.
 
 
-##REPORT_USERPERIOD_PBS.PY
+## REPORT_USERPERIOD_PBS.PY
 Per essere eseguito lo script prende in input tre parametri:
  1 - nome utente nel formato nome.cognome
  3 - file di log da cui iniziare a registrare la cputime e il walltime
@@ -42,7 +42,7 @@ Il file sopra citato riporta:
  - un resoconto finale che indica il totale numero di job nel periodo indicato, la cputime totale per il periodo indicato, la walltime totale per il periodo indicato
 
 
-##REPORT_STATUS_PBS.PY
+## REPORT_STATUS_PBS.PY
 Lo script prende due parametri in input: 
 	param1: nome del file di inizio periodo
 	param2: nome del file di fine periodo
@@ -56,7 +56,7 @@ Il file sopra citato riporta:
 - l'intervallo temporale di considerazione
 - il nome di ogni utente trovato, il numero di jobs per ogni file e la lista di jobs. Il numero e l'elenco di jobs con status = Ok, il numero e l'elenco di jobs con status = error, il numero e l'elenco di jobs con status = Killed manually, il numero e l'elenco di jobs con status non identificato.
 
-##REPORT_WALLTIME_PBS.PY
+## REPORT_WALLTIME_PBS.PY
 Lo script prende tre parametri in input: 
 	param1: nome del file di inizio periodo
 	param2: nome del file di fine periodo
