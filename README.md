@@ -7,7 +7,7 @@ Elenco di script:
 - report_status_pbs_py
 - report_walltime_pbs.py
 
-##REPORT_PERIOD_PBS.PY
+## REPORT_PERIOD_PBS.PY
 Lo script prende due parametri in input: 
 	param1: nome del file di inizio periodo
 	param2: nome del file di fine periodo
