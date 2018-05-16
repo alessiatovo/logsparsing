@@ -1,3 +1,5 @@
+#README.md
+
 Elenco di script:
 
 - report_period_pbs.py
@@ -5,13 +7,13 @@ Elenco di script:
 - report_status_pbs_py
 - report_walltime_pbs.py
 
-REPORT_PERIOD_PBS.PY
+##REPORT_PERIOD_PBS.PY
 Lo script prende due parametri in input: 
 	param1: nome del file di inizio periodo
 	param2: nome del file di fine periodo
 Esempio di lancio script:
 
-python ./report_period_pbs.py 20180101 20180331
+```python ./report_period_pbs.py 20180101 20180331```
 
 Lo script crea una cartella LOGS_Period all'interno della home directory dell'utente (directory da cui viene lanciato lo script).
 All'interno della cartella viene creto un file con il nome "log_periodoinizio_periodofine.txt" che riporta il resoconto di tutti i job eseguiti da tutti gli utenti che hanno eseguito job in quel periodo.
@@ -22,7 +24,7 @@ Il file sopra citato riporta:
 Le informazioni riportate nell'ultimo punto vengono mostrate per ogni utente presente nell'intervallo di tempo considerato.
 
 
-REPORT_USERPERIOD_PBS.PY
+##REPORT_USERPERIOD_PBS.PY
 Per essere eseguito lo script prende in input tre parametri:
  1 - nome utente nel formato nome.cognome
  3 - file di log da cui iniziare a registrare la cputime e il walltime
@@ -30,7 +32,7 @@ Per essere eseguito lo script prende in input tre parametri:
 
 Esempio di lancio script:
 
-python ./reporst_userPeriod_pbs.py alessia.tovo 20180101 20180331
+```python ./reporst_userPeriod_pbs.py alessia.tovo 20180101 20180331```
 
 Lo script crea una cartella LOGS_UserPeriod all'interno della home directory dell'utente (directory da cui viene lanciato lo script).
 All'interno della cartella viene creato un file con il nome "log_periodoinizio_periodofine.txt" che riporta il resoconto di tutti i job eseguiti dall'utente nome.cognome nel periodo indicato.
@@ -40,13 +42,13 @@ Il file sopra citato riporta:
  - un resoconto finale che indica il totale numero di job nel periodo indicato, la cputime totale per il periodo indicato, la walltime totale per il periodo indicato
 
 
-REPORT_STATUS_PBS.PY
+##REPORT_STATUS_PBS.PY
 Lo script prende due parametri in input: 
 	param1: nome del file di inizio periodo
 	param2: nome del file di fine periodo
 Esempio di lancio script:
 
-python ./report_status_pbs.py 20180101 20180331
+```python ./report_status_pbs.py 20180101 20180331```
 
 Lo script crea una cartella LOGS_StatusPeriod all'interno della home directory dell'utente (directory da cui viene lanciato lo script).
 All'interno della cartella viene creato un file con il nome "log_periodoinizio_periodofine.txt" che riporta il resoconto di tutti i job eseguiti dall'utente nome.cognome nel periodo indicato.
@@ -54,14 +56,14 @@ Il file sopra citato riporta:
 - l'intervallo temporale di considerazione
 - il nome di ogni utente trovato, il numero di jobs per ogni file e la lista di jobs. Il numero e l'elenco di jobs con status = Ok, il numero e l'elenco di jobs con status = error, il numero e l'elenco di jobs con status = Killed manually, il numero e l'elenco di jobs con status non identificato.
 
-REPORT_WALLTIME_PBS.PY
+##REPORT_WALLTIME_PBS.PY
 Lo script prende tre parametri in input: 
 	param1: nome del file di inizio periodo
 	param2: nome del file di fine periodo
 	param3: walltime nel formato hh:mm_ss
 Esempio di lancio script:
 
-python ./report_walltime_pbs.py 20180101 20180331
+```python ./report_walltime_pbs.py 20180101 20180331```
 
 Lo script crea una cartella LOGS_StatusPeriod all'interno della home directory dell'utente (directory da cui viene lanciato lo script).
 All'interno della cartella viene creato un file con il nome "log_periodoinizio_periodofine.txt" che riporta il resoconto di tutti i job eseguiti dall'utente nome.cognome nel periodo indicato.
